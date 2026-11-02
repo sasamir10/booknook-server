@@ -15,7 +15,7 @@ Express and MongoDB API for the BookNook online library. Production must use Mon
 
 ## Environment and local development
 
-Copy `.env.example` to `.env`, set `MONGODB_URI`, and set `BETTER_AUTH_URL` to the client origin. Use a replica-set MongoDB for transactions. Run `pnpm install`, `pnpm dev`, and start the client separately.
+Copy `.env.example` to `.env`, set `MONGODB_URI`, and set `BETTER_AUTH_URL` to the client origin. Configure local MongoDB as replica set `rs0` or use Atlas; standalone MongoDB cannot run the transactional borrow/return flow. Run `pnpm install`, `pnpm dev`, and start the client separately.
 
 For production, set `CLIENT_URL` to the exact Vercel origin and `BETTER_AUTH_URL` to the client’s Better Auth origin. Add the Render service’s origin to the Atlas network access list, and use a transaction-capable Atlas deployment.
 
