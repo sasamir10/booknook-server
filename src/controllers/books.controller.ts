@@ -21,7 +21,10 @@ function validId(value: string | string[] | undefined): string {
 export const getBooks: RequestHandler = async (req, res) => {
     const query = listBooksQuerySchema.safeParse(req.query);
     if (!query.success) {
-        console.error("BOOK QUERY VALIDATION:", query.error.issues);
+        console.error(
+            "BOOK QUERY VALIDATION:",
+            JSON.stringify(query.error.issues),
+        );
         throw new AppError("Book filters are invalid.", 400);
     }
     const { mine, limit, category, search } = query.data;
