@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
 import { ObjectId } from "mongodb";
 import { AppError } from "../utils/app-error.js";
-import { createBookSchema, updateBookSchema } from "../validators/schemas.js";
+import { createBookSchema, listBooksQuerySchema, updateBookSchema } from "../validators/schemas.js";
 import * as books from "../services/books.service.js";
 
 function validId(value: string | string[] | undefined): string {
@@ -10,15 +10,10 @@ function validId(value: string | string[] | undefined): string {
 }
 
 export const getBooks: RequestHandler = async (req, res) => {
-  const mine = req.query.mine === "true";
-  if (req.query.mine !== undefined && req.query.mine !== "true" && req.query.mine !== "false") {
-    throw new AppError("The mine query parameter must be true or false.", 400);
-  }
-  const rawLimit = req.query.limit;
-  const limit = rawLimit === undefined ? undefined : Number(rawLimit);
-  if (limit !== undefined && (!Number.isInteger(limit) || limit < 1 || limit > 1000)) throw new AppError("Limit must be a whole number from 1 to 1000.", 400);
-  if (req.query.sort !== undefined && req.query.sort !== "newest") throw new AppError("Books can only be sorted newest first.", 400);
-  const data = await books.listBooks({ userId: mine ? req.authUser!.userId : undefined, limit });
+  const query = listBooksQuerySchema.safeParse(req.query);
+  if (!query.success) throw new AppError("Book filters are invalid.", 400);
+  const { mine, limit, category, search } = query.data;
+  const data = await books.listBooks({ userId: mine === "true" ? req.authUser!.userId : undefined, limit, category, search });
   res.json({ success: true, data });
 };
 

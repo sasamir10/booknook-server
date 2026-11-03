@@ -28,3 +28,11 @@ export const updateBookSchema = z.object({
 }).strict().refine((data) => Object.keys(data).length > 0, "Provide at least one field to update.");
 
 export const borrowBookSchema = z.object({ bookId: z.string().regex(/^[a-f\d]{24}$/i, "Invalid book ID.") }).strict();
+
+export const listBooksQuerySchema = z.object({
+  mine: z.enum(["true", "false"]).optional(),
+  limit: z.string().regex(/^\d+$/, "Limit must be a whole number.").transform(Number).pipe(z.number().int().min(1).max(1000)).optional(),
+  sort: z.literal("newest").optional(),
+  category: z.enum(BOOK_CATEGORIES).optional(),
+  search: z.string().trim().max(100, "Search must be 100 characters or fewer.").optional(),
+}).strict();

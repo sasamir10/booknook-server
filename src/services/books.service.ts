@@ -1,6 +1,6 @@
-import { ObjectId } from "mongodb";
+import { ObjectId, type Filter } from "mongodb";
 import { getDatabase } from "../config/db.js";
-import type { BookDocument, BookResponse } from "../types/domain.js";
+import type { BookCategory, BookDocument, BookResponse } from "../types/domain.js";
 import { toBookResponse } from "../types/domain.js";
 import { AppError } from "../utils/app-error.js";
 import { availableAfterTotalChange } from "../utils/inventory.js";
@@ -10,8 +10,17 @@ import type { createBookSchema, updateBookSchema } from "../validators/schemas.j
 type CreateBookInput = z.infer<typeof createBookSchema>;
 type UpdateBookInput = z.infer<typeof updateBookSchema>;
 
-export async function listBooks(options: { userId?: string; limit?: number }): Promise<BookResponse[]> {
-  const filter = options.userId ? { addedByUserId: options.userId } : {};
+export async function listBooks(options: { userId?: string; limit?: number; category?: BookCategory; search?: string }): Promise<BookResponse[]> {
+  const filter: Filter<BookDocument> = {};
+  if (options.userId) filter.addedByUserId = options.userId;
+  if (options.category) filter.category = options.category;
+  if (options.search?.trim()) {
+    const regexCharacters = new Set([".", "*", "+", "?", "^", "$", "{", "}", "(", ")", "|", "[", "]", String.fromCharCode(92)]);
+    const escapeCharacter = String.fromCharCode(92);
+    const escapedSearch = [...options.search.trim()].map((character) => regexCharacters.has(character) ? `${escapeCharacter}${character}` : character).join("");
+    const expression = new RegExp(escapedSearch, "i");
+    filter.$or = [{ title: expression }, { author: expression }];
+  }
   let cursor = getDatabase().collection<BookDocument>("books")
     .find(filter)
     .sort({ createdAt: -1 });
