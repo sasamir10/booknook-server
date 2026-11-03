@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import { isCorsOriginAllowed } from "./config/cors.js";
 import { closeDatabase, connectDatabase } from "./config/db.js";
 import { env } from "./config/env.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
@@ -9,12 +10,10 @@ import borrowsRouter from "./routes/borrows.routes.js";
 async function start(): Promise<void> {
   await connectDatabase();
   const app = express();
-  const allowedOrigins = new Set([env.CLIENT_URL, "http://localhost:3000"]);
-
   app.disable("x-powered-by");
   app.use(cors({
     origin(origin, callback) {
-      if (!origin || allowedOrigins.has(origin)) return callback(null, true);
+      if (isCorsOriginAllowed(origin, env.NODE_ENV, env.CLIENT_URL)) return callback(null, true);
       return callback(new Error("Origin is not allowed by CORS."));
     },
     credentials: false,
