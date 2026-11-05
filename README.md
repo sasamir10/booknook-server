@@ -1,4 +1,4 @@
-# ⚙️ BookNook — Backend API
+# ⚙️ BookNook - Backend API
 
 <p align="center">
   <img src="https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white" />
@@ -32,15 +32,15 @@ Built with Node.js, Express.js, TypeScript, and MongoDB, it provides secure API 
 
 ## ✨ Key Features
 
-- 📚 **Book Management** — Create, retrieve, update, and delete books.
-- 🔎 **Search & Filtering** — Search books and filter by category.
-- 🔐 **JWT Authentication** — Verify Better Auth tokens for protected operations.
-- 📖 **Borrowing System** — Borrow available books with inventory validation.
-- ↩️ **Return Management** — Process returns and restore available copies.
-- 🛡️ **Duplicate Prevention** — Prevent duplicate active borrowing.
-- 🔄 **Database Transactions** — Maintain consistency during borrowing and returning.
-- 👤 **Ownership Protection** — Restrict book management to its owner.
-- ✅ **Request Validation** — Validate incoming data using Zod.
+- 📚 **Book Management** - Create, retrieve, update, and delete books.
+- 🔎 **Search & Filtering** - Search books and filter by category.
+- 🔐 **JWT Authentication** - Verify Better Auth tokens for protected operations.
+- 📖 **Borrowing System** - Borrow available books with inventory validation.
+- ↩️ **Return Management** - Process returns and restore available copies.
+- 🛡️ **Duplicate Prevention** - Prevent duplicate active borrowing.
+- 🔄 **Database Transactions** - Maintain consistency during borrowing and returning.
+- 👤 **Ownership Protection** - Restrict book management to its owner.
+- ✅ **Request Validation** - Validate incoming data using Zod.
 
 ## 🛠️ Tech Stack
 
@@ -131,5 +131,5 @@ pnpm start
 ---
 
 <p align="center">
-  ⚙️ <strong>BookNook Backend — Secure. Reliable. Efficient.</strong>
+  ⚙️ <strong>BookNook Backend - Secure. Reliable. Efficient.</strong>
 </p>
